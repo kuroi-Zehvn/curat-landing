@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curat – Clínica</title>
+  <!-- iframeResizer: auto-ajusta la altura del embed en Carrd/otros sitios -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.9/iframeResizer.contentWindow.min.js"></script>
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #d9d0c4;
+      --gold:    #736027;
+      --gold-lt: rgba(115,96,39,.18);
+      --gold-md: rgba(115,96,39,.35);
+      --card:    rgba(255,255,255,.22);
+      --radius:  16px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      height: auto !important;
+      overflow: visible !important;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--gold);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      line-height: 1.65;
+      min-height: 100vh;
+      height: auto !important;
+      overflow: visible !important;
+    }
+
+    /* ─── Layout ─── */
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 18px 40px;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--gold-md);
+      margin: 28px 0;
+    }
+
+    /* ─── Header ─── */
+    .header {
+      text-align: center;
+      padding: 44px 0 28px;
+    }
+    .header img {
+      width: 55%;
+      max-width: 230px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* ─── Video ─── */
+    .video-wrap {
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 8px 0 4px;
+    }
+    .video-ratio {
+      position: relative;
+      padding-bottom: 125%;
+    }
+    .video-ratio iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    /* ─── Form card ─── */
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--gold-md);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      margin: 18px 0;
+    }
+
+    .sec-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid var(--gold-md);
+      margin-bottom: 18px;
+    }
+    .sec-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+
+    /* ─── Inputs ─── */
+    .fg { margin-bottom: 16px; }
+    .fg:last-child { margin-bottom: 0; }
+
+    label.field-label {
+      display: block;
+      font-size: .88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .opt { font-weight: 400; opacity: .65; font-size: .8rem; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--gold-md);
+      border-radius: 9px;
+      background: rgba(255,255,255,.48);
+      color: var(--gold);
+      font-family: inherit;
+      font-size: .9rem;
+      -webkit-appearance: none;
+      transition: border-color .2s, background .2s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255,255,255,.7);
+    }
+    input::placeholder, textarea::placeholder { opacity: .5; }
+
+    textarea { min-height: 78px; resize: vertical; }
+
+    /* ─── Radio / options ─── */
+    .radio-list { display: flex; flex-direction: column; gap: 9px; }
+
+    .radio-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: .9rem;
+    }
+    .radio-opt input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .other-box { display: none; margin-top: 8px; }
+    .other-box.show { display: block; }
+
+    /* ─── Pain scale ─── */
+    .pain-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .pain-num {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--gold-lt);
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,.25);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 24px; height: 24px;
+      border: none;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+    }
+    .pain-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: .75rem;
+      opacity: .7;
+    }
+
+    /* ─── Privacy notice ─── */
+    .privacy-notice {
+      border: 1.5px solid var(--gold-md);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin: 10px 0 14px;
+      background: rgba(255,255,255,.18);
+      font-size: .86rem;
+    }
+    .privacy-check-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .privacy-check-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .privacy-toggle {
+      color: var(--gold);
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .privacy-body {
+      display: none;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--gold-md);
+      font-size: .82rem;
+      line-height: 1.65;
+      color: var(--gold);
+    }
+    .privacy-body.open { display: block; }
+    .privacy-body p { margin-bottom: 10px; }
+    .privacy-body p:last-child { margin-bottom: 0; }
+    .privacy-body a { color: var(--gold); }
+
+    /* ─── Form heading ─── */
+    .form-heading {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: .04em;
+      color: var(--gold);
+      margin: 10px 0 18px;
+    }
+
+    /* ─── Policy notice ─── */
+    .policy-notice {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: rgba(115,96,39,.12);
+      border: 1.5px solid var(--gold-md);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 10px 0 14px;
+    }
+    .policy-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--gold);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .policy-text {
+      font-size: .87rem;
+      line-height: 1.6;
+      color: var(--gold);
+    }
+
+    /* ─── Submit button ─── */
+    .btn-wa {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 6px;
+      padding: 15px;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: .02em;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn-wa:hover { opacity: .85; }
+    .btn-wa:active { transform: scale(.98); }
+    .btn-wa svg { width: 22px; height: 22px; fill: var(--bg); flex-shrink: 0; }
+
+    /* ─── Social ─── */
+    .social-sec { text-align: center; margin: 36px 0; }
+    .social-heading {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 22px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .social-row {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+    .soc-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--gold);
+      font-size: .75rem;
+      font-weight: 600;
+      transition: transform .2s, opacity .2s;
+    }
+    .soc-link:hover { transform: translateY(-4px); opacity: .75; }
+    .soc-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--gold-lt);
+      border: 1.5px solid var(--gold-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .soc-circle svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--gold);
+    }
+
+    /* ─── Map ─── */
+    .map-sec { margin: 10px 0 36px; text-align: center; }
+    .map-heading {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+    .map-box {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--gold-md);
+      opacity: 0;
+      animation: fadeUp 1s ease .5s forwards;
+    }
+    .map-box iframe {
+      display: block;
+      width: 100%;
+      height: 250px;
+      border: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      text-align: center;
+      font-size: .78rem;
+      opacity: .55;
+      padding: 10px 0 20px;
+    }
+
+    /* ─── Responsive tweaks ─── */
+    @media (min-width: 600px) {
+      .form-card { padding: 30px 28px; }
+      .header img { max-width: 260px; width: 45%; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ═══ LOGO ═══ -->
+  <header class="header">
+    <img
+      src="https://www.dropbox.com/scl/fi/pbbuvm3jzrobpn5xa4ijx/CuratLogo.png?rlkey=l8wpu8b6gikh3g1us6m418x11&st=fxitfx9v&raw=1"
+      alt="Curat – Clínica"
+      onerror="this.style.fontSize='1.8rem';this.style.fontWeight='bold';this.outerHTML='<span style=\'font-size:2rem;font-weight:bold;color:#736027\'>CURAT</span>'"
+    />
+  </header>
+
+  <hr class="divider" />
+
+  <!-- ═══ VIDEO ═══ -->
+  <div class="video-wrap">
+    <div class="video-ratio">
+      <iframe
+        src="https://icono3d.dotcompal.co/video/embed/qsjexws7s9"
+        allow="autoplay; fullscreen"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ═══ FORMULARIO ═══ -->
+  <h2 class="form-heading">Agenda tu Cita</h2>
+  <form id="clinicForm" novalidate>
+
+    <!-- 1 · Datos del paciente -->
+    <div class="form-card">
+      <div class="sec-title">
+        <span class="sec-num">1</span> Datos del Paciente
+      </div>
+
+      <div class="fg">
+        <label class="field-label" for="nombre">Nombre completo *</label>
+        <input type="text" id="nombre" placeholder="Tu nombre completo" required />
+      </div>
+      <div class="fg">
+        <label class="field-label" for="edad">Edad *</label>
+        <input type="text" id="edad" placeholder="Ej: 35" required />
+      </div>
+      <div class="fg">
+        <label class="field-label" for="telefono">Teléfono / WhatsApp *</label>
+        <input type="tel" id="telefono" placeholder="Ej: 6641234567" required />
+      </div>
+      <div class="fg">
+        <label class="field-label" for="email">
+          Correo electrónico <span class="opt">(opcional)</span>
+        </label>
+        <input type="email" id="email" placeholder="correo@ejemplo.com" />
+      </div>
+    </div>
+
+    <!-- 2 · Solicitud de cita -->
+    <div class="form-card">
+      <div class="sec-title">
+        <span class="sec-num">2</span> Solicitud de Cita
+      </div>
+
+      <div class="fg">
+        <label class="field-label">¿Desea agendar una cita? *</label>
+        <div class="radio-list">
+          <label class="radio-opt"><input type="radio" name="agendar" value="Sí" required /> Sí</label>
+          <label class="radio-opt"><input type="radio" name="agendar" value="No, solo quiero información" /> No, solo quiero información</label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="field-label">¿Es su primera vez en la clínica? *</label>
+        <div class="radio-list">
+          <label class="radio-opt"><input type="radio" name="primera_vez" value="Sí" required /> Sí</label>
+          <label class="radio-opt"><input type="radio" name="primera_vez" value="No" /> No</label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="field-label">¿Qué tipo de atención necesita? *</label>
+        <div class="radio-list">
+          <label class="radio-opt"><input type="radio" name="tipo_atencion" value="Consulta general" required /> Consulta general</label>
+          <label class="radio-opt"><input type="radio" name="tipo_atencion" value="Revisión / seguimiento" /> Revisión / seguimiento</label>
+          <label class="radio-opt"><input type="radio" name="tipo_atencion" value="Dolor o molestia" /> Dolor o molestia</label>
+          <label class="radio-opt"><input type="radio" name="tipo_atencion" value="Estudios / análisis" /> Estudios / análisis</label>
+          <label class="radio-opt"><input type="radio" name="tipo_atencion" value="Urgencia menor" /> Urgencia menor</label>
+          <label class="radio-opt">
+            <input type="radio" name="tipo_atencion" value="Otro" id="tipoOtroRadio" /> Otro:
+          </label>
+          <div class="other-box" id="otroBox">
+            <input type="text" id="otroAtencion" placeholder="Especifica el tipo de atención…" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · Motivo de la cita -->
+    <div class="form-card">
+      <div class="sec-title">
+        <span class="sec-num">3</span> Motivo de la Cita
+      </div>
+
+      <div class="fg">
+        <label class="field-label" for="motivo">¿Cuál es el motivo principal de su cita? *</label>
+        <textarea id="motivo" placeholder="Ej: dolor de espalda, revisión médica, molestia, seguimiento, resultados…" required></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="field-label">¿Desde cuándo presenta el problema o molestia? *</label>
+        <div class="radio-list">
+          <label class="radio-opt"><input type="radio" name="duracion" value="Hoy" required /> Hoy</label>
+          <label class="radio-opt"><input type="radio" name="duracion" value="1 a 3 días" /> 1 a 3 días</label>
+          <label class="radio-opt"><input type="radio" name="duracion" value="1 semana" /> 1 semana</label>
+          <label class="radio-opt"><input type="radio" name="duracion" value="Más de 1 semana" /> Más de 1 semana</label>
+          <label class="radio-opt"><input type="radio" name="duracion" value="Más de 1 mes" /> Más de 1 mes</label>
+          <label class="radio-opt"><input type="radio" name="duracion" value="No aplica" /> No aplica</label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="field-label">Del 1 al 10, ¿qué tan fuerte es la molestia o dolor?</label>
+        <div class="pain-wrap">
+          <div class="pain-num" id="painNum">5</div>
+          <input type="range" id="dolor" min="1" max="10" value="5"
+            oninput="document.getElementById('painNum').textContent = this.value" />
+          <div class="pain-labels"><span>1 – Leve</span><span>10 – Muy fuerte</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 · Preferencia de cita -->
+    <div class="form-card">
+      <div class="sec-title">
+        <span class="sec-num">4</span> Preferencia de Cita
+      </div>
+
+      <div class="fg">
+        <label class="field-label" for="fecha">¿Qué día le gustaría agendar?</label>
+        <input type="date" id="fecha" />
+      </div>
+
+      <div class="fg">
+        <label class="field-label">¿Qué horario prefiere?</label>
+        <div class="radio-list">
+          <label class="radio-opt"><input type="radio" name="horario" value="Mañana" /> Mañana</label>
+          <label class="radio-opt"><input type="radio" name="horario" value="Tarde" /> Tarde</label>
+          <label class="radio-opt"><input type="radio" name="horario" value="Cualquier horario disponible" /> Cualquier horario disponible</label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="field-label">¿Cómo prefiere que lo contactemos?</label>
+        <div class="radio-list">
+          <label class="radio-opt"><input type="radio" name="contacto" value="WhatsApp" /> WhatsApp</label>
+          <label class="radio-opt"><input type="radio" name="contacto" value="Llamada" /> Llamada</label>
+          <label class="radio-opt"><input type="radio" name="contacto" value="Correo" /> Correo</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 · Información adicional -->
+    <div class="form-card">
+      <div class="sec-title">
+        <span class="sec-num">5</span> Información Adicional
+      </div>
+
+      <div class="fg">
+        <label class="field-label">¿Tiene algún estudio, receta o documento relacionado?</label>
+        <div class="radio-list">
+          <label class="radio-opt"><input type="radio" name="documentos" value="Sí" /> Sí</label>
+          <label class="radio-opt"><input type="radio" name="documentos" value="No" /> No</label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="field-label" for="comentarios">
+          Comentarios adicionales <span class="opt">(opcional)</span>
+        </label>
+        <textarea id="comentarios" placeholder="Cualquier información que consideres importante…"></textarea>
+      </div>
+    </div>
+
+    <!-- AVISO DE POLÍTICA DE CITA -->
+    <div class="policy-notice">
+      <div class="policy-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      </div>
+      <div class="policy-text">
+        <strong>Política de reservación</strong><br />
+        Los pacientes de <strong>primera vez</strong> deberán realizar un pago del
+        <strong>50 %</strong> del costo de la consulta para confirmar su cita.<br />
+        En caso de cancelación, se requiere aviso con <strong>mínimo 24 horas de anticipación</strong>;
+        de lo contrario, el depósito <strong>no será reembolsable</strong>.
+      </div>
+    </div>
+
+    <!-- AVISO DE PRIVACIDAD -->
+    <div class="privacy-notice">
+      <label class="privacy-check-label">
+        <input type="checkbox" id="privacyCheck" />
+        <span>
+          He leído y acepto el
+          <span class="privacy-toggle" onclick="togglePrivacy()">Aviso de Privacidad</span>
+          de Clínica Curat.
+        </span>
+      </label>
+      <div class="privacy-body" id="privacyBody">
+        <p><strong>Aviso de Privacidad – Clínica Curat</strong></p>
+        <p>
+          Con fundamento en la <em>Ley Federal de Protección de Datos Personales en Posesión de los
+          Particulares</em> (LFPDPPP), le informamos que <strong>Clínica Curat</strong> es responsable
+          del tratamiento de los datos personales que usted nos proporciona a través de este formulario.
+        </p>
+        <p><strong>¿Qué datos recopilamos?</strong><br />
+          Nombre completo, edad, teléfono / WhatsApp, correo electrónico (opcional), motivo de consulta
+          y demás información relacionada con su solicitud de cita.</p>
+        <p><strong>¿Para qué los usamos?</strong><br />
+          Exclusivamente para: agendar y confirmar su cita médica, dar seguimiento a su atención,
+          enviarle recordatorios y, en su caso, ponernos en contacto con usted a través del medio
+          que usted indique.</p>
+        <p><strong>¿Con quién los compartimos?</strong><br />
+          Sus datos <strong>no serán compartidos</strong> con terceros sin su consentimiento, salvo
+          obligación legal.</p>
+        <p><strong>Derechos ARCO</strong><br />
+          Usted puede ejercer sus derechos de Acceso, Rectificación, Cancelación u Oposición
+          escribiéndonos a <a href="mailto:curat.tj@gmail.com">curat.tj@gmail.com</a>.</p>
+        <p><strong>Contacto</strong><br />
+          Clínica Curat · Tijuana, B.C., México<br />
+          WhatsApp: 664 420 9299 · curat.tj@gmail.com</p>
+      </div>
+    </div>
+
+    <!-- ENVIAR POR WHATSAPP -->
+    <button type="button" class="btn-wa" onclick="enviarWhatsApp()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+      </svg>
+      Enviar por WhatsApp
+    </button>
+
+  </form>
+
+  <hr class="divider" style="margin-top:36px" />
+
+  <!-- ═══ REDES SOCIALES ═══ -->
+  <section class="social-sec">
+    <div class="social-heading">Contáctanos</div>
+    <div class="social-row">
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/526644209299" class="soc-link" target="_blank" rel="noopener">
+        <div class="soc-circle">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </div>
+        WhatsApp
+      </a>
+
+      <!-- Facebook -->
+      <a href="https://www.facebook.com/curatmx/?locale=es_LA" class="soc-link" target="_blank" rel="noopener">
+        <div class="soc-circle">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </div>
+        Facebook
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/curat.mx/" class="soc-link" target="_blank" rel="noopener">
+        <div class="soc-circle">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </div>
+        Instagram
+      </a>
+
+      <!-- Email -->
+      <a href="mailto:curat.tj@gmail.com" class="soc-link">
+        <div class="soc-circle">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        Email
+      </a>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ═══ MAPA ═══ -->
+  <section class="map-sec">
+    <div class="map-heading">📍 ¿Cómo llegar?</div>
+    <div class="map-box">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3364.5419451890825!2d-116.99576252375537!3d32.51166979749803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80d949e502b65f93%3A0x97a3787ed6893f91!2sCURA&#39;T!5e0!3m2!1sen!2smx!4v1778645396351!5m2!1sen!2smx"
+        allowfullscreen=""
+        loading="lazy">
+      </iframe>
+    </div>
+  </section>
+
+  <footer>© 2025 Curat – Todos los derechos reservados</footer>
+
+</div><!-- /wrap -->
+
+<script>
+  /* ── Auto-resize: envía altura real al iframe padre ── */
+  function enviarAltura() {
+    var h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ iframeHeight: h }, '*');
+  }
+  window.addEventListener('load', enviarAltura);
+  window.addEventListener('resize', enviarAltura);
+  new MutationObserver(enviarAltura).observe(document.body, { childList: true, subtree: true, attributes: true });
+
+  /* ── Toggle aviso de privacidad ── */
+  function togglePrivacy() {
+    var body = document.getElementById('privacyBody');
+    body.classList.toggle('open');
+  }
+
+  /* ── Toggle "Otro" input ── */
+  document.querySelectorAll('input[name="tipo_atencion"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var box = document.getElementById('otroBox');
+      box.classList.toggle('show', this.value === 'Otro');
+    });
+  });
+
+  /* ── Helpers ── */
+  function radio(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '—';
+  }
+  function val(id) {
+    var el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
+  /* ── Validación básica ── */
+  function validar() {
+    if (!val('nombre'))    { alert('Por favor ingresa tu nombre completo.'); return false; }
+    if (!val('edad'))      { alert('Por favor ingresa tu edad.'); return false; }
+    if (!val('telefono'))  { alert('Por favor ingresa tu teléfono / WhatsApp.'); return false; }
+    if (!radio('agendar').replace('—',''))  { alert('Indica si deseas agendar una cita.'); return false; }
+    if (!radio('primera_vez').replace('—','')) { alert('Indica si es tu primera vez en la clínica.'); return false; }
+    if (!radio('tipo_atencion').replace('—','')) { alert('Selecciona el tipo de atención que necesitas.'); return false; }
+    if (!val('motivo'))    { alert('Por favor describe el motivo de tu cita.'); return false; }
+    if (!radio('duracion').replace('—','')) { alert('Indica desde cuándo tienes el problema.'); return false; }
+    if (!document.getElementById('privacyCheck').checked) {
+      alert('Debes aceptar el Aviso de Privacidad para continuar.');
+      return false;
+    }
+    return true;
+  }
+
+  /* ── Enviar por WhatsApp ── */
+  function enviarWhatsApp() {
+    if (!validar()) return;
+
+    var tipoAtencion = radio('tipo_atencion');
+    if (tipoAtencion === 'Otro') {
+      var otro = val('otroAtencion');
+      tipoAtencion = 'Otro: ' + (otro || '(no especificado)');
+    }
+
+    var fecha = val('fecha') || '—';
+    var email = val('email') || 'No proporcionado';
+    var comentarios = val('comentarios') || 'Ninguno';
+
+    var msg =
+      '🏥 *Nueva solicitud – Clínica Curat*\n\n' +
+      '📋 *DATOS DEL PACIENTE*\n' +
+      '• Nombre: ' + val('nombre') + '\n' +
+      '• Edad: ' + val('edad') + '\n' +
+      '• Teléfono: ' + val('telefono') + '\n' +
+      '• Correo: ' + email + '\n\n' +
+      '📅 *SOLICITUD DE CITA*\n' +
+      '• ¿Agendar cita?: ' + radio('agendar') + '\n' +
+      '• ¿Primera vez?: ' + radio('primera_vez') + '\n' +
+      '• Tipo de atención: ' + tipoAtencion + '\n\n' +
+      '🩺 *MOTIVO DE LA CITA*\n' +
+      '• Motivo: ' + val('motivo') + '\n' +
+      '• Duración del problema: ' + radio('duracion') + '\n' +
+      '• Nivel de dolor (1–10): ' + val('dolor') + '\n\n' +
+      '🗓️ *PREFERENCIA DE CITA*\n' +
+      '• Fecha preferida: ' + fecha + '\n' +
+      '• Horario preferido: ' + radio('horario') + '\n' +
+      '• Contacto preferido: ' + radio('contacto') + '\n\n' +
+      '📎 *INFORMACIÓN ADICIONAL*\n' +
+      '• Documentos: ' + radio('documentos') + '\n' +
+      '• Comentarios: ' + comentarios;
+
+    window.open('https://wa.me/526644209299?text=' + encodeURIComponent(msg), '_blank');
+  }
+</script>
+</body>
+</html>
